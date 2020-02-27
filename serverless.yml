@@ -1,0 +1,35 @@
+service: SQSTest
+
+provider:
+  name: aws
+  runtime: dotnetcore2.1
+  timeout: 300
+  tracing:
+    lambda: true
+  environment:
+    sqs_url:
+      Ref: Queue
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sqs:*"
+        - "xray:*"
+      Resource:
+        - "*"
+package:
+  individually: true
+
+functions:
+  run:
+    handler: CsharpHandlers::AwsDotnetCsharp.Handler::Run
+    timeout: 300
+    memorySize: 3008
+    package:
+      artifact: bin/release/netcoreapp2.1/package.zip
+resources:
+  Resources:
+    Queue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: test-queue3
