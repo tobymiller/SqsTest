@@ -61,10 +61,9 @@ namespace AwsDotnetCsharp
                         {
                             var sw2 = new Stopwatch();
                             sw2.Start();
-                            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100000));
                             try
                             {
-                                var sendMessageAsync = client.SendMessageAsync(sqsUrl, message, cts.Token);
+                                var sendMessageAsync = client.SendMessageAsync(sqsUrl, message, CancellationToken.None);
                                 await sendMessageAsync;
                             }
                             catch (Exception)
@@ -72,9 +71,9 @@ namespace AwsDotnetCsharp
                                 // we still track this one as it threw a legit exception (throttling probably)
                             }
 
-                            if (!cts.IsCancellationRequested)
+                            sw2.Stop();
+                            if (sw2.ElapsedMilliseconds < 90000)
                             {
-                                sw2.Stop();
                                 timesBag.Add(sw2.ElapsedMilliseconds);
                             }
                             else
