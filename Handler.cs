@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon;
 using Amazon.SQS;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Microsoft.Extensions.Configuration;
@@ -28,9 +29,9 @@ namespace AwsDotnetCsharp
         {
             Environment.SetEnvironmentVariable("AWS_XRAY_CONTEXT_MISSING", "LOG_ERROR");
             AWSSDKHandler.RegisterXRayForAllServices();
+            AWSConfigs.LoggingConfig.LogTo = LoggingOptions.Console;
             var config = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .AddXmlFile("app.config")
                 .Build();
             var services = new ServiceCollection();
             services.AddSingleton<IConfiguration>(config);

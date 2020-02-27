@@ -28,9 +28,6 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Update="app.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
